@@ -1,4 +1,5 @@
 ﻿using exercise.wwwapi.Models;
+using exercise.wwwapi.ViewModel.Student;
 
 namespace exercise.wwwapi.Data
 {
@@ -8,7 +9,13 @@ namespace exercise.wwwapi.Data
         {
             new Student() { FirstName="Nathan",LastName="King" },
             new Student() { FirstName="Dave", LastName="Ames" }
+            
         };
+
+        public Student Get(string name)
+        {
+            return _students.FirstOrDefault(s => s.FirstName == name);
+        }
 
         public Student Add(Student student)
         {            
@@ -16,6 +23,14 @@ namespace exercise.wwwapi.Data
 
             return student;
         }
+
+        public bool Remove(string name)
+        {
+            Student student = _students.FirstOrDefault(s => s.FirstName == name);
+            return _students.Remove(student);
+        }
+
+      
 
         public List<Student> getAll()
         {
