@@ -1,4 +1,5 @@
 ﻿using exercise.wwwapi.Models;
+using exercise.wwwapi.ViewModel.Student;
 
 namespace exercise.wwwapi.Repository
 {
@@ -7,8 +8,8 @@ namespace exercise.wwwapi.Repository
         Student Add(Student student);
         Student Get(string name);
         IEnumerable<Student> GetAll();
-        Student Update(string name);
+        void Update(string name, StudentDto model);
 
-        bool Delete(string name);
+        Student Delete(string name);
     }
 }

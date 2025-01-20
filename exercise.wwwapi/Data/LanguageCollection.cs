@@ -1,4 +1,5 @@
-﻿using exercise.wwwapi.Models;
+﻿using exercise.wwwapi.DTO.Language;
+using exercise.wwwapi.Models;
 
 namespace exercise.wwwapi.Data
 {
@@ -10,11 +11,12 @@ namespace exercise.wwwapi.Data
             new Language("C#")
         };
 
-        public Language Add(Language language)
+        public Language Add(string name)
         {
-            languages.Add(language);
+            Language newLanguage = new Language(name);
+            languages.Add(newLanguage);
 
-            return language;
+            return newLanguage;
         }
 
         public Language Remove(string name)
@@ -23,6 +25,23 @@ namespace exercise.wwwapi.Data
             languages.Remove(language);
 
             return language;
+        }
+
+        public Language Get(string name)
+        {
+            return languages.FirstOrDefault(s => s.Name == name);
+        }
+
+        public void Update(string name, LanguageDto model)
+        {
+            languages.FirstOrDefault(s => s.Name == name).Name = model.Name;
+        }
+
+
+
+        public List<Language> GetAll()
+        {
+            return languages.ToList();
         }
 
         public List<Language> Languages { get { return languages; } }

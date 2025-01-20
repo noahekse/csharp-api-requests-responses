@@ -30,9 +30,15 @@ namespace exercise.wwwapi.Data
             return _students.Remove(student);
         }
 
-      
+        public void Update(string name, StudentDto model)
+        {
+            _students.FirstOrDefault(s => s.FirstName == name).LastName = model.LastName;
+            _students.FirstOrDefault(s => s.FirstName == name).FirstName = model.FirstName;
+        }
 
-        public List<Student> getAll()
+
+
+        public List<Student> GetAll()
         {
             return _students.ToList();
         }

@@ -6,7 +6,7 @@ namespace exercise.wwwapi.Repository
 {
     public class StudentRepository : IStudentRepository
     {
-        private readonly StudentCollection _students;
+        private StudentCollection _students;
         public StudentRepository() 
         {
             _students = new StudentCollection();
@@ -18,9 +18,10 @@ namespace exercise.wwwapi.Repository
             return student;
         }
 
-        public bool Delete(string name)
+        public Student Delete(string name)
         {
-            return _students.Remove(name);
+            Student student = Get(name);
+            return _students.Remove(name) ? student : new Student();
         }
 
         public Student Get(string name)
@@ -30,15 +31,12 @@ namespace exercise.wwwapi.Repository
 
         public IEnumerable<Student> GetAll()
         {
-            return _students.getAll();
+            return _students.GetAll();
         }
 
-        public Student Update(string name, StudentRequest model)
+        public void Update(string name, StudentDto model)
         {
-            Student student = Get(name);
-            student.FirstName = model.FirstName;
-            student.LastName = model.LastName;
-            return student;
+           _students.Update(name, model);
         }
     }
 }

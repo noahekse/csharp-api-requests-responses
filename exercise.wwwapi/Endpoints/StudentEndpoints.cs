@@ -8,13 +8,14 @@ namespace workshop.wwwapi.Endpoints
 {
     public static class StudentEndpoints
     {
-        public static void ConfigurePetEndpoint(this WebApplication app)
+        public static void ConfigureStudentEndpoint(this WebApplication app)
         {
             var pets = app.MapGroup("students");
 
             pets.MapGet("/", GetStudents);
             pets.MapPost("/", AddStudent);
             pets.MapDelete("/{name}", DeleteStudent);
+            pets.MapPut("/{name}", UpdateStudent);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -24,7 +25,7 @@ namespace workshop.wwwapi.Endpoints
             return Results.Ok(students);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> AddStudent(IStudentRepository repository, StudentRequest model)
+        public static async Task<IResult> AddStudent(IStudentRepository repository, StudentDto model)
         {
             Student student = new Student()
             {
@@ -37,12 +38,19 @@ namespace workshop.wwwapi.Endpoints
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> UpdateStudent(IStudentRepository repository, string name, StudentRequest model)
+        public static async Task<IResult> UpdateStudent(IStudentRepository repository, string name, StudentDto model)
         {
-            Student student = repository.Update(name, model);
+            try
+            {
+                repository.Update(name, model);
+            }
+            catch (Exception ex) 
+            {
+                return TypedResults.Problem(ex.Message);
+            }
            
 
-            return Results.Ok(student);
+            return Results.Ok();
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -52,7 +60,7 @@ namespace workshop.wwwapi.Endpoints
             try
             {
                 var model = repository.Get(name);
-                if (repository.Delete(name)) return Results.Ok(new { When=DateTime.Now, Status="Deleted", FirstName=model.FirstName, LastName=model.LastName});
+                if (repository.Delete(name) != null) return Results.Ok(new { When=DateTime.Now, Status="Deleted", FirstName=model.FirstName, LastName=model.LastName});
                 return TypedResults.NotFound();
             }
             catch (Exception ex)
